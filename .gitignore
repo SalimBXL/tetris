@@ -1,1 +1,19 @@
+# Artefacts de compilation
 /target
+
+# Cargo.lock est volontairement versionné : le projet contient des binaires,
+# et la CI s'appuie dessus (cargo test --locked).
+
+# Sauvegardes de rustfmt et symboles de débogage Windows
+**/*.rs.bk
+*.pdb
+
+# Éditeurs
+.idea/
+.vscode/
+*.swp
+*~
+
+# Fichiers système
+.DS_Store
+Thumbs.db
