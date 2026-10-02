@@ -1,5 +1,6 @@
 use std::io::{self, Write, stdout};
-use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
+//use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
+use std::time::{Duration, Instant};
 
 use crossterm::cursor::{Hide, MoveTo, Show};
 use crossterm::event::{self, KeyCode, KeyEventKind, KeyModifiers};
@@ -10,6 +11,7 @@ use crossterm::{execute, queue};
 use tetris::engine::board::{BOARD_HEIGHT, BOARD_WIDTH};
 use tetris::engine::game::{Action, Game, GameState};
 use tetris::engine::piece::{Piece, Position, Tetromino};
+use tetris::seed;
 
 /// Durée maximale d'attente d'une touche avant de redessiner (environ 60 images par seconde).
 const FRAME: Duration = Duration::from_millis(16);
@@ -56,7 +58,7 @@ fn read_input(event: event::Event) -> Option<Input> {
 }
 
 fn run(out: &mut impl Write) -> io::Result<()> {
-    let mut game = Game::new(seed());
+    let mut game = Game::new(seed::from_clock());
     let mut last_frame = Instant::now();
 
     loop {
@@ -80,13 +82,6 @@ fn run(out: &mut impl Write) -> io::Result<()> {
         game.tick(now - last_frame);
         last_frame = now;
     }
-}
-
-fn seed() -> u64 {
-    SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .map(|d| d.as_nanos() as u64)
-        .unwrap_or(0)
 }
 
 fn color(kind: Tetromino) -> Color {

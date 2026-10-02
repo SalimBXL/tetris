@@ -1,10 +1,11 @@
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::time::Duration;
 
 use macroquad::prelude::*;
 
 use tetris::engine::board::{BOARD_HEIGHT, BOARD_WIDTH};
 use tetris::engine::game::{Action, Game, GameState};
 use tetris::engine::piece::{Piece, Position, Tetromino};
+use tetris::seed;
 
 // --- Mise en page ---
 
@@ -30,7 +31,7 @@ fn window_conf() -> Conf {
 
 #[macroquad::main(window_conf)]
 async fn main() {
-    let mut game = Game::new(seed());
+    let mut game = Game::new(seed::from_clock());
     let mut inputs = Inputs::new();
 
     loop {
@@ -38,7 +39,7 @@ async fn main() {
             break;
         }
         if game.state() == GameState::GameOver && is_key_pressed(KeyCode::R) {
-            game = Game::new(seed());
+            game = Game::new(seed::from_clock());
         }
 
         // Temps : c'est ici, et seulement ici, qu'on lit l'horloge.
@@ -52,13 +53,6 @@ async fn main() {
         draw(&game);
         next_frame().await;
     }
-}
-
-fn seed() -> u64 {
-    SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .map(|d| d.as_nanos() as u64)
-        .unwrap_or(0)
 }
 
 // --- Entrées ---
