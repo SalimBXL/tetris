@@ -275,4 +275,193 @@ mod tests {
             assert_eq!(r.ccw().cw(), r);
         }
     }
+
+    /// Dessine la pièce (posée en haut à gauche) après `quarter_turns` rotations horaires,
+    /// dans une boîte de la taille du dessin attendu, et compare.
+    fn assert_shape(kind: Tetromino, quarter_turns: usize, expected: &[&str]) {
+        let mut piece = Piece::new(kind, ORIGIN);
+        for _ in 0..quarter_turns {
+            piece = piece.rotated_cw();
+        }
+        let size = expected.len() as i32;
+        let cells = piece.cells();
+        let drawn: Vec<String> = (0..size)
+            .map(|y| {
+                (0..size)
+                    .map(|x| if cells.contains(&(x, y)) { '#' } else { '.' })
+                    .collect()
+            })
+            .collect();
+        assert_eq!(
+            drawn, expected,
+            "{kind:?} après {quarter_turns} quart(s) de tour"
+        );
+    }
+
+    #[rustfmt::skip]
+    #[test]
+    fn i_has_the_right_shape_in_every_rotation() {
+        assert_shape(Tetromino::I, 0, &[
+            "....",
+            "####",
+            "....",
+            "....",
+        ]);
+        assert_shape(Tetromino::I, 1, &[
+            "..#.",
+            "..#.",
+            "..#.",
+            "..#.",
+        ]);
+        assert_shape(Tetromino::I, 2, &[
+            "....",
+            "....",
+            "####",
+            "....",
+        ]);
+        assert_shape(Tetromino::I, 3, &[
+            ".#..",
+            ".#..",
+            ".#..",
+            ".#..",
+        ]);
+    }
+
+    #[rustfmt::skip]
+    #[test]
+    fn o_has_the_same_shape_in_every_rotation() {
+        for quarter_turns in 0..4 {
+            assert_shape(Tetromino::O, quarter_turns, &[
+                ".##.",
+                ".##.",
+                "....",
+                "....",
+            ]);
+        }
+    }
+
+    #[rustfmt::skip]
+    #[test]
+    fn t_has_the_right_shape_in_every_rotation() {
+        assert_shape(Tetromino::T, 0, &[
+            ".#.",
+            "###",
+            "...",
+        ]);
+        assert_shape(Tetromino::T, 1, &[
+            ".#.",
+            ".##",
+            ".#.",
+        ]);
+        assert_shape(Tetromino::T, 2, &[
+            "...",
+            "###",
+            ".#.",
+        ]);
+        assert_shape(Tetromino::T, 3, &[
+            ".#.",
+            "##.",
+            ".#.",
+        ]);
+    }
+
+    #[rustfmt::skip]
+    #[test]
+    fn s_has_the_right_shape_in_every_rotation() {
+        assert_shape(Tetromino::S, 0, &[
+            ".##",
+            "##.",
+            "...",
+        ]);
+        assert_shape(Tetromino::S, 1, &[
+            ".#.",
+            ".##",
+            "..#",
+        ]);
+        assert_shape(Tetromino::S, 2, &[
+            "...",
+            ".##",
+            "##.",
+        ]);
+        assert_shape(Tetromino::S, 3, &[
+            "#..",
+            "##.",
+            ".#.",
+        ]);
+    }
+
+    #[rustfmt::skip]
+    #[test]
+    fn z_has_the_right_shape_in_every_rotation() {
+        assert_shape(Tetromino::Z, 0, &[
+            "##.",
+            ".##",
+            "...",
+        ]);
+        assert_shape(Tetromino::Z, 1, &[
+            "..#",
+            ".##",
+            ".#.",
+        ]);
+        assert_shape(Tetromino::Z, 2, &[
+            "...",
+            "##.",
+            ".##",
+        ]);
+        assert_shape(Tetromino::Z, 3, &[
+            ".#.",
+            "##.",
+            "#..",
+        ]);
+    }
+
+    #[rustfmt::skip]
+    #[test]
+    fn j_has_the_right_shape_in_every_rotation() {
+        assert_shape(Tetromino::J, 0, &[
+            "#..",
+            "###",
+            "...",
+        ]);
+        assert_shape(Tetromino::J, 1, &[
+            ".##",
+            ".#.",
+            ".#.",
+        ]);
+        assert_shape(Tetromino::J, 2, &[
+            "...",
+            "###",
+            "..#",
+        ]);
+        assert_shape(Tetromino::J, 3, &[
+            ".#.",
+            ".#.",
+            "##.",
+        ]);
+    }
+
+    #[rustfmt::skip]
+    #[test]
+    fn l_has_the_right_shape_in_every_rotation() {
+        assert_shape(Tetromino::L, 0, &[
+            "..#",
+            "###",
+            "...",
+        ]);
+        assert_shape(Tetromino::L, 1, &[
+            ".#.",
+            ".#.",
+            ".##",
+        ]);
+        assert_shape(Tetromino::L, 2, &[
+            "...",
+            "###",
+            "#..",
+        ]);
+        assert_shape(Tetromino::L, 3, &[
+            "##.",
+            ".#.",
+            ".#.",
+        ]);
+    }
 }
