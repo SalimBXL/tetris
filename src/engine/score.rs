@@ -122,4 +122,11 @@ mod tests {
         assert!(gravity_interval(MAX_SPEED_LEVEL) > Duration::ZERO);
         assert_eq!(gravity_interval(500), gravity_interval(MAX_SPEED_LEVEL));
     }
+
+    #[test]
+    fn clearing_an_impossible_number_of_lines_scores_nothing() {
+        let mut score = Score::new();
+        score.add_lines(5);
+        assert_eq!(score.points(), 0);
+    }
 }

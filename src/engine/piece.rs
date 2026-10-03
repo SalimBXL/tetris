@@ -267,4 +267,12 @@ mod tests {
         assert_eq!(piece.moved_right().position(), Position { x: 4, y: 5 });
         assert_eq!(piece.moved_down().position(), Position { x: 3, y: 6 });
     }
+
+    #[test]
+    fn ccw_undoes_cw_for_every_rotation() {
+        for r in [Rotation::R0, Rotation::R1, Rotation::R2, Rotation::R3] {
+            assert_eq!(r.cw().ccw(), r);
+            assert_eq!(r.ccw().cw(), r);
+        }
+    }
 }
